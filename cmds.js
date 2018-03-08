@@ -131,12 +131,12 @@ exports.testCmd = (rl, id) => {
             }, 0);
             rl.question(colorize(quiz.question, 'red'), answer => {
                 if (answer.toLowerCase().trim() === quiz.answer.toLowerCase().trim()) {
-                    log("Su respuesta es:");
-                    biglog('CORRECTO', 'green');
+                    log("Su respuesta es correcta.");
+                    biglog('CORRECTA', 'green');
                     rl.prompt();
                 } else {
-                    log("Su respuesta es:");
-                    biglog('INCORRECTO', 'red');
+                    log("Su respuesta es incorrecta.");
+                    biglog('INCORRECTA', 'red');
                     rl.prompt();
                 }
             });
