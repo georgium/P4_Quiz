@@ -199,7 +199,7 @@ exports.playCmd = rl => {
                 let quiz = model.getByIndex(toBeResolved[id]); //sacamos la pregunta asociada a ese id
                 //model.deleteByIndex(id);
                 toBeResolved.splice(id,1);
-                rl.question(colorize(quiz.question, 'red'), answer => {
+                rl.question(colorize(`${quiz.question } `, 'red'), answer => {
                     if (answer.toLowerCase().trim() === quiz.answer.toLowerCase().trim()) {
                         score++;
                         log(`CORRECTA - Lleva   ${score}  aciertos`);
