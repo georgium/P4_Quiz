@@ -202,16 +202,16 @@ exports.playCmd = rl => {
                 rl.question(colorize(quiz.question, 'red'), answer => {
                     if (answer.toLowerCase().trim() === quiz.answer.toLowerCase().trim()) {
                         score++;
-                        log(`CORRECTO - Lleva "  ${score} " aciertos"`);
-                        log(`Puntuación ${colorize(score, 'green')}`);
+                        log(`CORRECTA - Lleva   ${score}  aciertos`);
+                        //log(`Puntuación ${colorize(score, 'green')}`);
 
                         playOne();
 
                     }
                     else {
-                        log("INCORRECTO");
+                        log("INCORRECTA");
                         log("Fin del examen. Aciertos:");
-                        biglog(score+1, 'magenta');
+                        biglog(score, 'magenta');
                         rl.prompt();
                     }
                 });
