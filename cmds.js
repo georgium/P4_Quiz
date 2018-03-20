@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
 
-const { models } = require('./model');
+const {models} = require('./model');
 
-const { log, biglog, errorlog, colorize } = require("./out");
+const {log, biglog, errorlog, colorize} = require("./out");
 
 
 
@@ -81,7 +81,7 @@ exports.addCmd = rl => {
                 });
         })
         .then(quiz => {
-            return model.squiz.create(quiz);
+            return models.quiz.create(quiz);
         })
         .then(quiz => {
             log(` ${colorize('Se ha añadido', 'magenta')}: ${quiz.question} ${colorize('=>', 'magenta')} ${quiz.answer}`);
@@ -281,16 +281,13 @@ exports.deleteCmd = (rl, id) => {
 exports.playCmd = rl => {
     let score = 0;
     let toBeResolved=[];
-    let preg_resp = [];
-    /**for (let i=0; i<model.count(); i++){
-        toBeResolved[i] = i;
-    }*/
+    let respondidas = [];
     models.quiz.findAll()
     .each(quiz => {
-        preg_resp.push(quiz);
+        respondidas.push(quiz);
     })
     .then (() => {
-        for (let i = 0; i < preg_resp.length; i++) {
+        for (let i = 0; i < respondidas.length; i++) {
             toBeResolved.push(i);
         }
     const playOne = () => {
@@ -302,14 +299,14 @@ exports.playCmd = rl => {
         } else {
             try {
                 let id = Math.floor(Math.random() * toBeResolved.length); //quitarla del array Math.random()
-                let quiz = model.getByIndex(toBeResolved[id]); //sacamos la pregunta asociada a ese id
+                let quiz = respondidas[toBeResolved[id]]; //sacamos la pregunta asociada a ese id
                 toBeResolved.splice(id,1);
                 return makeQuestion(rl, `${quiz.question}? `)
                 .then(answer =>{
                     if (answer.toLowerCase().trim()=== quiz.answer.toLowerCase()){
                         score++;
                         log(`CORRECTA - Lleva   ${score}  aciertos`);
-                        //log(`Puntuación ${colorize(score, 'green')}`);
+                        log(`Puntuación ${colorize(score, 'green')}`);
 
                         playOne();
                     } else {
@@ -338,57 +335,6 @@ exports.playCmd = rl => {
     .then (() => {
         rl.prompt();
     });
-    /**let score = 0; //Mantiene aciertos
-    let toBeResolved = [];
-    //array que guarda id de todas las preguntas que existen
-    //for (var i = 1; i < model.count(); i++) {
-    let num = 0;
-    for (let i = 0; i < model.count(); i++) {
-        toBeResolved[i] = i;
-
-    };
-
-    //mete todos los id
-
-
-    const playOne = () => {
-        //ninguna pregunta por resolver
-        if (toBeResolved.length === 0) {
-            log(`No hay nada más que preguntar`);
-            log(`Fin del examen. Aciertos: `);
-            biglog(`Puntuación ${colorize(score, 'red')}`);
-            rl.prompt();
-        } else {
-            try {            //coge una pregunta la azar
-                let id = Math.floor(Math.random() * toBeResolved.length); //quitarla del array Math.random()
-                let quiz = model.getByIndex(toBeResolved[id]); //sacamos la pregunta asociada a ese id
-                //model.deleteByIndex(id);
-                toBeResolved.splice(id, 1);
-                rl.question(colorize(`${quiz.question} `, 'red'), answer => {
-                    if (answer.toLowerCase().trim() === quiz.answer.toLowerCase().trim()) {
-                        score++;
-                        log(`CORRECTA - Lleva   ${score}  aciertos`);
-                        //log(`Puntuación ${colorize(score, 'green')}`);
-
-                        playOne();
-
-                    }
-                    else {
-                        log("INCORRECTA");
-                        log("Fin del examen. Aciertos:");
-                        biglog(score, 'magenta');
-                        rl.prompt();
-                    }
-                });
-            } catch (error) {
-                errorlog(error.message);
-                rl.prompt();
-            }
-        }
-    };
-    playOne();
-};
-*/
 };
 
 /**
